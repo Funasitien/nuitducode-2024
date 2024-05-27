@@ -1,6 +1,8 @@
 # ⛏️ MIGHTY MINER
 ##### Projet Nuit Du Code 2024 de Funasitien, Bugxit et Boss-MBD
 
+![Bloc d'air](./tititiel.png)
+
 ## ℹ️ A propos du jeu
 Dans **MIGHTY MINER**, vous devez récupérer le plus de points possible en descendant  dans la mine chercher des coffres - mais comme tout le monde vous ne savez pas voler.
 
