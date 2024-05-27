@@ -170,6 +170,9 @@ class App:
         else: 
             self.idle_animation = False
 
+        #Player/Exit collsion
+        if self.map[self.player['x']][self.player['y']] == 5: print("EXIIIIT")
+
     def draw_in_game(self): 
         idle_show = 0
         pyxel.cls(0)
@@ -188,6 +191,11 @@ class App:
         elif self.looking_at == "l": 
             if self.idle_animation: pyxel.blt(self.player['x']*16, self.player['y']*16+32, 0, 32+idle_show, 16, 16, 16, 11)
             else: pyxel.blt(self.player['x']*16, self.player['y']*16+32, 0, 32, 16, 16, 16, 11)
+
+    def update_time_over(self): pass
+    def draw_time_over(self): 
+        pyxel.cls(0)
+        pyxel.text(0, 0, f"Time's up ! You scored {self.score} ", 7)
 
 
     def decrement_time(self):
