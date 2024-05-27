@@ -5,6 +5,9 @@ from time import time
 
 class App:
     def __init__(self) -> None:
+        self.going_up = False
+        self.climbing_frame = 0
+
         self.map_number = -1
         self.map, self.map_title = self.get_new_level()
 
@@ -178,12 +181,14 @@ class App:
                 self.player['x'] -= 1
 
         if not already_moved and pyxel.btnp(self.key_up) and self.map[self.player['x']][self.player['y']] == 4:
+            self.going_up = True
             if self.player['y'] > 0 and self.map[self.player['x']][self.player['y']-1] == 2:
                 self.map[self.player['x']][self.player['y']-1] = 0
             if self.player['y'] > 0 and self.map[self.player['x']][self.player['y']-1] in [0, 1, 4]:
                 self.player['y'] -= 1 
 
         if self.last_move != None: self.last_time_moved = time()
+        if self.last_move not in [None, "u"]: self.going_up = False
 
         #Make chests fall
         for x in range(16):
@@ -262,6 +267,12 @@ class App:
         elif self.looking_at == "l": 
             if self.idle_animation: pyxel.blt(player_show_x, player_show_y+32, 0, 32+idle_show, 16, 16, 16, 11)
             else: pyxel.blt(player_show_x, player_show_y+32, 0, 32, 16, 16, 16, 11)
+
+        if self.going_up:
+            self.climbing_frame += 1
+            climb_show = ( self.climbing_frame % 30 )
+            climb_show = 16 if climb_show >= 15 else 0
+            pyxel.blt(player_show_x, player_show_y+32, 0, 64, 16+climb_show, 16, 16, 11)
 
         if self.chest_opend[2] != 0:
             self.chest_opend[2] -= 1
@@ -351,29 +362,28 @@ class App:
                 [2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
                 [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]]
         
+        map3 = [[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 5],
+                [3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                [2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 2],
+                [1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2],
+                [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2],
+                [3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2],
+                [2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 2],
+                [1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2],
+                [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2],
+                [3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2],
+                [1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 2],
+                [1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2],
+                [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2],
+                [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2],
+                [1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 2],
+                [1, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2]] 
+        
         self.map_number += 1
-        if self.map_number >= 3: self.map_number = 0
+        if self.map_number >= 4: self.map_number = 0
         if self.map_number == 0: return (map0, "The First One")
         if self.map_number == 1: return (map1, "One by one")
         if self.map_number == 2: return (map2, "The Maze")
+        if self.map_number == 3: return (map3, "Time is the key")
 
 App()
-
-
-"""
-        self.map_Time_is_the_key = [[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 5],
-                    [3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-                    [2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 2],
-                    [1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2],
-                    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2],
-                    [3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2],
-                    [2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 2],
-                    [1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2],
-                    [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2],
-                    [3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2],
-                    [1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 2],
-                    [1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2],
-                    [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2],
-                    [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2],
-                    [1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 2],
-                    [1, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2]] """
