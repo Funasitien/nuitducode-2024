@@ -188,6 +188,7 @@ class App:
 
             if self.player['y'] != last_y: self.slow_fall = True
             self.slow_fall_list = list(range((self.player['y']-last_y)*16, 0, -1))
+            return
 
         #Player/Chest collision
         if self.map[self.player['x']][self.player['y']] == 1:
