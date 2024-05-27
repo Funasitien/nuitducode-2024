@@ -3,7 +3,7 @@ import pyxel
 class App:
     def __init__(self) -> None:
         
-        self.currentState = ""
+        self.currentState = "title_screen"
 
         pyxel.init(256, 256, title="NDC")
         pyxel.run(self.update, self.draw)
@@ -17,8 +17,9 @@ class App:
     #Unbreak   = 3 
     #Ladder    = 4
 
-    def update_(self): pass
-    def draw_(self): 
+    def update_title_screen(self):
+        pass
+    def draw_title_screen(self): 
         pyxel.rect(0, 0, 16, 16, 3)
         pyxel.text(0, 16, "Yes", 3)
 
