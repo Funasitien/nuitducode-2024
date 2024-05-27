@@ -65,6 +65,7 @@ class App:
     #Exit      = 5
 
 
+    
     def update_title_screen(self):
         if pyxel.btn(pyxel.KEY_RETURN):
             self.current_state = "in_game"
@@ -74,16 +75,22 @@ class App:
             self.key_down = pyxel.KEY_DOWN
             self.key_left = pyxel.KEY_LEFT
             self.key_right = pyxel.KEY_RIGHT
+            self.currentXGold = 192
+            self.currentYGold = 48
         elif pyxel.btn(pyxel.KEY_Z):
             self.key_up = pyxel.KEY_Z
             self.key_down = pyxel.KEY_S
             self.key_left = pyxel.KEY_Q
             self.key_right = pyxel.KEY_D
+            self.currentXGold = 48
+            self.currentYGold = 48
         elif pyxel.btn(pyxel.KEY_W):
             self.key_up = pyxel.KEY_W
             self.key_down = pyxel.KEY_S
             self.key_left = pyxel.KEY_A
             self.key_right = pyxel.KEY_D
+            self.currentXGold = 120
+            self.currentYGold = 48
 
         if pyxel.btn(pyxel.KEY_1):
             self.timer = 90
@@ -100,9 +107,26 @@ class App:
 
         for i in range(16):
             for j in range(2):
-                pyxel.blt(i * 16, j * 16, 0, 0, 80, 16, 16)
+                pyxel.blt(i * 16, j * 16, 0, [16, 0][j], 80, 16, 16)
 
         pyxel.blt(16,16, 0, 0, 16, 16, 16, 11)
+
+        pyxel.blt(48, 48, 0, 64, 48, 16, 16, 11)
+        pyxel.blt(32, 64, 0, 80, 48, 16, 16, 11)
+        pyxel.blt(48, 64, 0, 32, 48, 16, 16, 11)
+        pyxel.blt(64, 64, 0, 48, 48, 16, 16, 11)
+
+        pyxel.blt(120, 48, 0, 0, 48, 16, 16, 11)
+        pyxel.blt(104, 64, 0, 16, 48, 16, 16, 11)
+        pyxel.blt(120, 64, 0, 32, 48, 16, 16, 11)
+        pyxel.blt(136, 64, 0, 48, 48, 16, 16, 11)
+
+        pyxel.blt(192, 48, 0, 0, 64, 16, 16, 11)
+        pyxel.blt(176, 64, 0, 16, 64, 16, 16, 11)
+        pyxel.blt(192, 64, 0, 32, 64, 16, 16, 11)
+        pyxel.blt(208, 64, 0, 48, 64, 16, 16, 11)
+
+        pyxel.blt(self.currentXGold, self.currentYGold, 0, 112, 48, 16, 16, 11)
 
     def update_in_game(self):
         #Player movement:
@@ -176,6 +200,10 @@ class App:
     def draw_in_game(self): 
         idle_show = 0
         pyxel.cls(0)
+
+        for i in range(16):
+            for j in range(2):
+                pyxel.blt(i * 16, j * 16, 0, [16, 0][j], 80, 16, 16)
 
         pyxel.text(0, 0, f"Score : {self.score}", 7)
         pyxel.text(0, 10, f"Timer : {round(self.timer)}", 7)
