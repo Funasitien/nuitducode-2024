@@ -259,7 +259,7 @@ class App:
 
         pyxel.text(10, 12, f"{round(self.timer)}", 0)
         pyxel.text(0, 20, f"level : {self.level}", 0)
-        pyxel.text(100, 15, f"Map Title : {self.map_title}", 0)
+        pyxel.text(85, 15, f"Map : {self.map_title}", 0)
 
         for x in range(16):
             for y in range(14):
