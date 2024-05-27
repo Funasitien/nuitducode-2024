@@ -5,6 +5,8 @@ from time import time
 
 class App:
     def __init__(self) -> None:
+        self.time_animation = 0
+
         self.going_up = False
         self.climbing_frame = 0
 
@@ -235,7 +237,8 @@ class App:
             self.is_pause_menu = True
             self.current_state = "fading"
 
-    def draw_in_game(self):             
+    def draw_in_game(self):    
+        if pyxel.frame_count % 8 == 0: self.time_animation += 1         
         idle_show = 0
         pyxel.cls(0)
 
@@ -243,8 +246,14 @@ class App:
             for j in range(2):
                 pyxel.blt(i * 16, j * 16, 0, [16, 0][j], 80, 16, 16)
 
-        pyxel.text(0, 0, f"Score : {self.score}", 0)
-        pyxel.text(0, 10, f"Timer : {round(self.timer)}", 0)
+        pyxel.blt(1, 1, 0, 14, 96, 7, 7, 11)
+        pyxel.text(10, 2, f"{self.score}", 0)
+        if self.time_animation % 4 == 0: pyxel.blt(1, 11, 0, 0, 96, 7, 7, 11)
+        if self.time_animation % 4 == 1: pyxel.blt(1, 11, 0, 7, 96, 7, 7, 11)
+        if self.time_animation % 4 == 2: pyxel.blt(1, 11, 0, 0, 103, 7, 7, 11)
+        if self.time_animation % 4 == 3: pyxel.blt(1, 11, 0, 7, 103, 7, 7, 11)
+
+        pyxel.text(10, 12, f"{round(self.timer)}", 0)
         pyxel.text(0, 20, f"level : {self.level}", 0)
         pyxel.text(100, 15, f"Map Title : {self.map_title}", 0)
 
@@ -282,6 +291,7 @@ class App:
     def draw_time_over(self): 
         pyxel.cls(0)
         pyxel.text(0, 0, f"Time's up ! You scored {self.score} ", 7)
+        pyxel.blt(100, 100, 0, 100, 0, 64, 16, 11)
 
     def update_fading(self): pass
     def draw_fading(self):
