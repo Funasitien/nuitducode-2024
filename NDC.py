@@ -11,4 +11,7 @@ class App:
     def update(self): getattr(self, f"update_{self.currentState}")
     def draw(self): getattr(self, f"draw_{self.currentState}")
 
+    def update_(self): pass
+    def draw_(self): pass
+
 App()
