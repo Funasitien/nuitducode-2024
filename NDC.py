@@ -84,8 +84,9 @@ class App:
         self.player = {'x' : 0, 'y' : 0}
 
         self.map[self.player['x']][self.player['y']] = 0
-
-        self.timer = 60
+        
+        self.difficulty = 0
+        self.timer = 90
 
         pyxel.init(256, 256, title="NDC", fps=60)
         
@@ -131,12 +132,15 @@ class App:
             self.key_right = pyxel.KEY_D
             self.currentXGold = [120, 104, 120, 136]
 
-        if pyxel.btn(pyxel.KEY_1):
+        if pyxel.btn(pyxel.KEY_1 or pyxel.KEY_KP_1):
             self.timer = 90
-        elif pyxel.btn(pyxel.KEY_2):
+            self.difficulty = 0
+        elif pyxel.btn(pyxel.KEY_2 or pyxel.KEY_KP_1):
             self.timer = 60
-        elif pyxel.btn(pyxel.KEY_3):
+            self.difficulty = 1
+        elif pyxel.btn(pyxel.KEY_3 or pyxel.KEY_KP_3):
             self.timer = 30
+            self.difficulty = 2
 
     def draw_title_screen(self):
         pyxel.cls(0)
@@ -165,9 +169,14 @@ class App:
         pyxel.blt(192, 64, 0, 32, 64, 16, 16, 11)
         pyxel.blt(208, 64, 0, 48, 64, 16, 16, 11)
 
-        pyxel.blt(48, 128, 0, 64, 64, 156, 16, 11)
+        pyxel.blt(48, 96, 0, 64, 64, 156, 16, 11)
+
+        pyxel.blt(64, 128, 0, 0, 110, 128, 16, 15)
+        pyxel.blt(64, 144, 0, 0, 126, 128, 16, 15)
+        pyxel.blt(64, 160, 0, 0, 142, 128, 16, 15)
+
         for i in range(4):
-            pyxel.blt(self.currentXGold[i], [48, 64, 64, 64][i], 0, 112, 48, 16, 16, 11)
+            pyxel.blt(self.currentXGold[i], [48, 64, 64, 64][i], 0, 96 + (self.difficulty * 16) , 48, 16, 16, 15)
 
     def update_in_game(self):
         if pyxel.btnp(pyxel.KEY_RETURN):
