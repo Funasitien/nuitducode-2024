@@ -3,7 +3,7 @@ import pyxel
 class App:
     def __init__(self) -> None:
         
-        self.current_state = "in_game"
+        self.current_state = "title_screen"
 
         self.looking_at = "r"
 
@@ -92,6 +92,21 @@ class App:
                 pyxel.blt(i * 16, j * 16, 0, 0, 80, 16, 16)
 
         pyxel.blt(16,16, 0, 0, 16, 16, 16, 11)
+
+        pyxel.blt(48, 48, 0, 64, 48, 16, 16, 11)
+        pyxel.blt(32, 64, 0, 80, 48, 16, 16, 11)
+        pyxel.blt(48, 64, 0, 32, 48, 16, 16, 11)
+        pyxel.blt(64, 64, 0, 48, 48, 16, 16, 11)
+
+        pyxel.blt(120, 48, 0, 0, 48, 16, 16, 11)
+        pyxel.blt(104, 64, 0, 16, 48, 16, 16, 11)
+        pyxel.blt(120, 64, 0, 32, 48, 16, 16, 11)
+        pyxel.blt(136, 64, 0, 48, 48, 16, 16, 11)
+
+        pyxel.blt(192, 48, 0, 0, 64, 16, 16, 11)
+        pyxel.blt(176, 64, 0, 16, 64, 16, 16, 11)
+        pyxel.blt(192, 64, 0, 32, 64, 16, 16, 11)
+        pyxel.blt(208, 64, 0, 48, 64, 16, 16, 11)
 
     def update_in_game(self):
         #Player movement:
