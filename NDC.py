@@ -2,30 +2,20 @@ import pyxel
 from threading import Thread
 from time import time
 
-def new_random_map(entry_point_coords : tuple): 
-    map = [[2, 2, 4, 4, 4, 4, 4, 3, 2, 3, 2, 3, 3, 5], 
-        [3, 2, 2, 3, 3, 3, 2, 3, 2, 2, 2, 3, 3, 2], 
-        [3, 3, 2, 2, 1, 3, 2, 2, 2, 3, 2, 3, 3, 2], 
-        [3, 3, 2, 3, 2, 2, 2, 3, 3, 3, 2, 2, 2, 2], 
-        [4, 4, 4, 3, 1, 3, 3, 3, 3, 3, 2, 3, 3, 2], 
-        [2, 3, 2, 3 ,3, 1, 4, 4, 2, 2, 2, 3, 3, 2], 
-        [1, 3, 2, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3, 2], 
-        [3, 3, 2, 3, 2, 3, 3, 2, 3, 3, 2, 2, 2, 2], 
-        [2, 3, 3, 3, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2], 
-        [2, 4, 4, 4, 4, 3, 3, 3, 3, 2, 3, 1, 2, 4], 
-        [2, 3, 2, 3, 3, 3, 2, 3, 3, 2, 3, 3, 3, 2], 
-        [2, 3, 3, 1, 4, 4, 4, 4, 4, 4, 2, 2, 3, 2], 
-        [1, 3, 3, 3, 3, 3, 2, 3, 3, 3, 3, 2, 3, 2], 
-        [3, 3, 2, 3, 3, 3, 2, 3, 2, 4, 4, 4, 4, 4], 
-        [4, 4, 4, 4, 4, 4, 4, 3, 4, 1, 3, 3, 3, 2], 
-        [1, 3, 2 ,3, 3, 3, 3, 3, 1, 3, 3, 1, 4, 4]]
-    return map
 
 class App:
     def __init__(self) -> None:
+        self.map_number = -1
+        self.map, self.map_title = self.get_new_level()
+
+        self.first_pause = True
+
+        self.fade_x, self.fade_y = -16, 0
+        self.fade_dir = 1
+        
         self.level = 1        
         self.chest_opend = [0, 0, 0]        
-        self.to_draw = 0
+        self.chest_opend = [0, 0, 0]
 
         self.slow_fall = False
 
@@ -49,57 +39,6 @@ class App:
         self.score = 0
 
         self.is_pause_menu = False
-
-        self.debug_map =  [[2, 2, 2, 3, 3, 2, 2, 2, 2, 1, 3, 3, 2, 2],
-                            [2, 2, 2, 1, 3, 2, 2, 2, 2, 2, 3, 3, 2, 2],
-                            [2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 3, 2, 2],
-                            [2, 2, 1, 4, 4, 4, 3, 2, 2, 0, 0, 0, 2, 2],
-                            [2, 2, 2, 2, 2, 2, 3, 1, 2, 2, 2, 2, 2, 2],
-                            [2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 2],
-                            [2, 2, 2, 2, 2, 2, 1, 3, 2, 1, 2, 2, 2, 2],
-                            [2, 2, 0, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-                            [2, 1, 0, 3, 3, 2, 0, 0, 2, 2, 4, 4, 4, 4],
-                            [2, 2, 0, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-                            [2, 2, 2, 2, 2, 2, 4, 4, 4, 3, 2, 2, 2, 2],
-                            [2, 0, 0, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2, 2],
-                            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2],
-                            [4, 4, 4, 4, 2, 2, 2, 4, 4, 4, 4, 2, 1, 2],
-                            [2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-                            [2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2], ]
-        
-        self.oneByOne = [[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-                      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-                      [2, 2, 1, 2, 2, 3, 1, 2, 2, 2, 2, 2, 2, 2],
-                      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2],
-                      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2], 
-                      [2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2],
-                      [2, 2, 2, 2, 1, 2, 3, 2, 3, 2, 2, 3, 2, 2],
-                      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], 
-                      [2, 3, 2, 3, 2, 2, 2, 3, 2, 2, 2, 1, 2, 2],
-                      [2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2],
-                      [2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-                      [3, 2, 2, 2, 3, 2, 2, 2, 2, 3, 2, 2, 2, 2],
-                      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 1],
-                      [2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2],
-                      [2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-                      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]]
-
-        self.map = [[2, 2, 4, 4, 4, 4, 4, 3, 2, 3, 2, 3, 3, 5], 
-                    [3, 2, 2, 3, 3, 3, 2, 3, 2, 2, 2, 3, 3, 2], 
-                    [3, 3, 2, 2, 1, 3, 2, 2, 2, 3, 2, 3, 3, 2], 
-                    [3, 3, 2, 3, 2, 2, 2, 3, 3, 3, 2, 2, 2, 2], 
-                    [4, 4, 4, 3, 1, 3, 3, 3, 3, 3, 2, 3, 3, 2], 
-                    [2, 3, 2, 3 ,3, 1, 4, 4, 2, 2, 2, 3, 3, 2], 
-                    [1, 3, 2, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3, 2], 
-                    [3, 3, 2, 3, 2, 3, 3, 2, 3, 3, 2, 2, 2, 2], 
-                    [2, 3, 3, 3, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2], 
-                    [2, 4, 4, 4, 4, 3, 3, 3, 3, 2, 3, 1, 2, 4], 
-                    [2, 3, 2, 3, 3, 3, 2, 3, 3, 2, 3, 3, 3, 2], 
-                    [2, 3, 3, 1, 4, 4, 4, 4, 4, 4, 2, 2, 3, 2], 
-                    [1, 3, 3, 3, 3, 3, 2, 3, 3, 3, 3, 2, 3, 2], 
-                    [3, 3, 2, 3, 3, 3, 2, 3, 2, 4, 4, 4, 4, 4], 
-                    [4, 4, 4, 4, 4, 4, 4, 3, 4, 1, 3, 3, 3, 2], 
-                    [1, 3, 2 ,3, 3, 3, 3, 3, 1, 3, 3, 1, 4, 4]]
 
         self.player = {'x' : 0, 'y' : 0}
 
@@ -125,12 +64,11 @@ class App:
     #Unbreak   = 3 
     #Ladder    = 4
     #Exit      = 5
-
-
     
     def update_title_screen(self):
         if pyxel.btnp(pyxel.KEY_RETURN):
             self.current_state = "in_game"
+            self.first_pause = False
             self.is_pause_menu = False
             self.last_time_moved = time()
             Thread(target=self.decrement_time, daemon=True).start()
@@ -154,15 +92,15 @@ class App:
             self.key_right = pyxel.KEY_D
             self.currentXGold = [120, 104, 120, 136]
 
-        if pyxel.btn(pyxel.KEY_1 or pyxel.KEY_KP_1):
+        if pyxel.btn(pyxel.KEY_1 or pyxel.KEY_KP_1) and self.first_pause:
             self.timer = 90
             self.difficulty = 0
             self.currentYGold = 128
-        elif pyxel.btn(pyxel.KEY_2 or pyxel.KEY_KP_1):
+        elif pyxel.btn(pyxel.KEY_2 or pyxel.KEY_KP_1) and self.first_pause:
             self.timer = 60
             self.difficulty = 1
             self.currentYGold = 149
-        elif pyxel.btn(pyxel.KEY_3 or pyxel.KEY_KP_3):
+        elif pyxel.btn(pyxel.KEY_3 or pyxel.KEY_KP_3) and self.first_pause:
             self.timer = 30
             self.difficulty = 2
             self.currentYGold = 170
@@ -286,9 +224,11 @@ class App:
         #Player/Exit collsion
         if self.map[self.player['x']][self.player['y']] == 5: 
             self.level += 1
-            self.map = new_random_map((self.player['x'], 0))
+            self.map, self.map_title = self.get_new_level()
             self.player['y'] = 0
             self.map[self.player['x']][self.player['y']] = 0
+            self.is_pause_menu = True
+            self.current_state = "fading"
 
     def draw_in_game(self):             
         idle_show = 0
@@ -301,6 +241,7 @@ class App:
         pyxel.text(0, 0, f"Score : {self.score}", 0)
         pyxel.text(0, 10, f"Timer : {round(self.timer)}", 0)
         pyxel.text(0, 20, f"level : {self.level}", 0)
+        pyxel.text(100, 15, f"Map Title : {self.map_title}", 0)
 
         for x in range(16):
             for y in range(14):
@@ -331,6 +272,22 @@ class App:
         pyxel.cls(0)
         pyxel.text(0, 0, f"Time's up ! You scored {self.score} ", 7)
 
+    def update_fading(self): pass
+    def draw_fading(self):
+        self.fade_x += 32*self.fade_dir
+        if (self.fade_x >= 256 and self.fade_dir == 1) or (self.fade_x < 0 and self.fade_dir == -1):
+            self.fade_y += 16
+            self.fade_x -= 16*self.fade_dir
+            self.fade_dir *= -1
+        pyxel.rect(self.fade_x, self.fade_y, 32, 16, 0)
+        pyxel.rect(0, 0, 16, 16, 0)
+        if self.fade_x >= 256 and self.fade_y >= 256: 
+            self.current_state = "in_game"
+            self.is_pause_menu = False
+            Thread(target=self.decrement_time, daemon=True).start()
+            self.fade_x = -16
+            self.fade_y = 0
+            self.fade_dir = 1
 
     def decrement_time(self):
         decrement_delay = last_time =time()
@@ -341,5 +298,63 @@ class App:
             self.timer -= decrement_delay
         if self.is_pause_menu: return
         self.current_state = "time_over"
+
+    def get_new_level(self): 
+        map0 = [[2, 2, 2, 3, 3, 2, 2, 2, 2, 1, 3, 3, 2, 5],
+                [2, 2, 2, 1, 3, 2, 2, 2, 2, 2, 3, 3, 2, 2],
+                [2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 3, 2, 2],
+                [2, 2, 1, 4, 4, 4, 3, 2, 2, 0, 0, 0, 2, 2],
+                [2, 2, 2, 2, 2, 2, 3, 1, 2, 2, 2, 2, 2, 2],
+                [2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 2],
+                [2, 2, 2, 2, 2, 2, 1, 3, 2, 1, 2, 2, 2, 2],
+                [2, 2, 0, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                [2, 1, 0, 3, 3, 2, 0, 0, 2, 2, 4, 4, 4, 4],
+                [2, 2, 0, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                [2, 2, 2, 2, 2, 2, 4, 4, 4, 3, 2, 2, 2, 2],
+                [2, 0, 0, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2, 2],
+                [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2],
+                [4, 4, 4, 4, 2, 2, 2, 4, 4, 4, 4, 2, 1, 2],
+                [2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                [2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2]]
+        
+        map2 = [[2, 2, 4, 4, 4, 4, 4, 3, 2, 3, 2, 3, 3, 5], 
+                [3, 2, 2, 3, 3, 3, 2, 3, 2, 2, 2, 3, 3, 2], 
+                [3, 3, 2, 2, 1, 3, 2, 2, 2, 3, 2, 3, 3, 2], 
+                [3, 3, 2, 3, 2, 2, 2, 3, 3, 3, 2, 2, 2, 2], 
+                [4, 4, 4, 3, 1, 3, 3, 3, 3, 3, 2, 3, 3, 2], 
+                [2, 3, 2, 3 ,3, 1, 4, 4, 2, 2, 2, 3, 3, 2], 
+                [1, 3, 2, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3, 2], 
+                [3, 3, 2, 3, 2, 3, 3, 2, 3, 3, 2, 2, 2, 2], 
+                [2, 3, 3, 3, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2], 
+                [2, 4, 4, 4, 4, 3, 3, 3, 3, 2, 3, 1, 2, 4], 
+                [2, 3, 2, 3, 3, 3, 2, 3, 3, 2, 3, 3, 3, 2], 
+                [2, 3, 3, 1, 4, 4, 4, 4, 4, 4, 2, 2, 3, 2], 
+                [1, 3, 3, 3, 3, 3, 2, 3, 3, 3, 3, 2, 3, 2], 
+                [3, 3, 2, 3, 3, 3, 2, 3, 2, 4, 4, 4, 4, 4], 
+                [4, 4, 4, 4, 4, 4, 4, 3, 4, 1, 3, 3, 3, 2], 
+                [1, 3, 2 ,3, 3, 3, 3, 3, 1, 3, 3, 1, 4, 4]]
+        
+        map1 = [[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 5],
+                [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                [2, 2, 1, 2, 2, 3, 1, 2, 2, 2, 2, 2, 2, 2],
+                [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2],
+                [1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2], 
+                [2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2],
+                [2, 2, 2, 2, 1, 2, 3, 2, 3, 2, 2, 3, 2, 2],
+                [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], 
+                [2, 3, 2, 3, 2, 2, 2, 3, 2, 2, 2, 1, 2, 2],
+                [2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2],
+                [2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                [3, 2, 2, 2, 3, 2, 2, 2, 2, 3, 2, 2, 2, 2],
+                [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 1],
+                [2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2],
+                [2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]]
+        
+        self.map_number += 1
+        if self.map_number >= 3: self.map_number = 0
+        if self.map_number == 0: return (map0, "The First One")
+        if self.map_number == 1: return (map1, "One by one")
+        if self.map_number == 2: return (map2, "The Maze")
 
 App()
