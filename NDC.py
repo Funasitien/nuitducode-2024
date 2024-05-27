@@ -24,6 +24,8 @@ class App:
         
         self.score = 0
 
+        self.is_pause_menu = False
+
         self.debug_map =  [[2, 2, 2, 3, 3, 2, 2, 2, 2, 1, 3, 3, 2, 2],
                     [2, 2, 2, 1, 3, 2, 2, 2, 2, 2, 3, 3, 2, 2],
                     [2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 3, 2, 2],
@@ -68,8 +70,9 @@ class App:
 
     
     def update_title_screen(self):
-        if pyxel.btn(pyxel.KEY_RETURN):
+        if pyxel.btnp(pyxel.KEY_RETURN):
             self.current_state = "in_game"
+            self.is_pause_menu = False
             self.last_time_moved = time()
             Thread(target=self.decrement_time, daemon=True).start()
 
@@ -131,6 +134,10 @@ class App:
             pyxel.blt(self.currentXGold[i], [48, 64, 64, 64][i], 0, 112, 48, 16, 16, 11)
 
     def update_in_game(self):
+        if pyxel.btnp(pyxel.KEY_RETURN):
+            self.current_state = "title_screen"
+            self.is_pause_menu = True
+
         if self.slow_fall: return
 
         #Player movement:
@@ -245,7 +252,7 @@ class App:
 
     def decrement_time(self):
         decrement_delay = last_time =time()
-        while self.timer > 0: 
+        while self.timer > 0 and not self.is_pause_menu: 
             current_time = time()
             decrement_delay = current_time - last_time
             last_time = current_time
