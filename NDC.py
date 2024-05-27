@@ -1,9 +1,11 @@
 import pyxel
 
+#pyxel edit theme2
+
 class App:
     def __init__(self) -> None:
         
-        self.currentState = "in_game"
+        self.currentState = "title_screen"
 
         self.key_up = pyxel.KEY_UP
         self.key_down = pyxel.KEY_DOWN
@@ -77,7 +79,20 @@ class App:
         elif pyxel.btn(pyxel.KEY_3):
             self.timer = 30
 
-    def draw_title_screen(self): pass
+    def draw_title_screen(self):
+        pyxel.cls(0)
+        for i in range(16):
+            for j in range(14):
+                pyxel.blt(i * 16, j * 16 + 32, 0, 0, 0, 16, 16)
+
+        for i in range(16):
+            for j in range(2):
+                pyxel.blt(i * 16, j * 16, 0, 0, 80, 16, 16)
+
+        pyxel.blt(16,16, 0, 0, 16, 16, 16, 11)
+        
+
+
 
     def update_in_game(self):
         #Player movement:
