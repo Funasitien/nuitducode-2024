@@ -126,7 +126,7 @@ class App:
         for i in range(4):
             pyxel.blt(self.currentXGold[i], [48, 64, 64, 64][i], 0, 112, 48, 16, 16, 11)
 
-    def update_in_game(self):
+def update_in_game(self):
         if self.slow_fall: return
 
         #Player movement:
