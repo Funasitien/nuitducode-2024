@@ -23,7 +23,9 @@ def new_random_map(entry_point_coords : tuple):
 
 class App:
     def __init__(self) -> None:
-        self.level = 1        self.chest_opend = [0, 0, 0]        self.chest_opend = [0, 0, 0]
+        self.level = 1        
+        self.chest_opend = [0, 0, 0]        
+        self.chest_opend = [0, 0, 0]
 
         self.slow_fall = False
 
