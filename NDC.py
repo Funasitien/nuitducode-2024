@@ -10,7 +10,7 @@ class App:
 
         self.last_time_moved = time()
         
-        self.current_state = "in_game"
+        self.current_state = "title_screen"
 
         self.looking_at = "r"
 
@@ -109,13 +109,13 @@ class App:
         self.last_move = None
         already_moved = False
 
-        if pyxel.btnp(pyxel.KEY_DOWN):
+        if pyxel.btnp(self.key_down):
             already_moved = True
             self.last_move = "d"
             if self.player['y'] < 13 and self.map[self.player['x']][self.player['y']+1] == 2:
                 self.map[self.player['x']][self.player['y']+1] = 0
 
-        if not already_moved and pyxel.btnp(pyxel.KEY_RIGHT): 
+        if not already_moved and pyxel.btnp(self.key_right): 
             self.looking_at = "r"
             self.last_move = "r"
             already_moved = True
@@ -124,7 +124,7 @@ class App:
             if self.player['x'] < 15 and self.map[self.player['x']+1][self.player['y']] in [0, 1, 4, 5]:
                 self.player['x'] += 1
 
-        if not already_moved and pyxel.btnp(pyxel.KEY_LEFT):
+        if not already_moved and pyxel.btnp(self.key_left):
             self.looking_at = "l"
             self.last_move = "l"
             already_moved = True
@@ -133,7 +133,7 @@ class App:
             if self.player['x'] > 0 and self.map[self.player['x']-1][self.player['y']] in [0, 1, 4, 5]:
                 self.player['x'] -= 1
 
-        if not already_moved and pyxel.btnp(pyxel.KEY_UP) and self.map[self.player['x']][self.player['y']] == 4:
+        if not already_moved and pyxel.btnp(self.key_up) and self.map[self.player['x']][self.player['y']] == 4:
             if self.player['y'] > 0 and self.map[self.player['x']][self.player['y']-1] == 2:
                 self.map[self.player['x']][self.player['y']-1] = 0
             if self.player['y'] > 0 and self.map[self.player['x']][self.player['y']-1] in [0, 1, 4]:
