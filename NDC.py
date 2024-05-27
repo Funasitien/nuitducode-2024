@@ -252,11 +252,12 @@ class App:
 
     def decrement_time(self):
         decrement_delay = last_time =time()
-        while self.timer > 0: 
+        while self.timer > 0 and not self.is_pause_menu: 
             current_time = time()
             decrement_delay = current_time - last_time
             last_time = current_time
             self.timer -= decrement_delay
+        if self.is_pause_menu: return
         self.current_state = "time_over"
 
 App()
