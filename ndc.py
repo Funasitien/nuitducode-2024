@@ -55,6 +55,8 @@ class App:
         self.timer = 90
 
         pyxel.init(256, 256, title="NDC", fps=60)
+
+        pyxel.colors.from_list([0x000000, 0x2bb33f, 0x4e1e11, 0x19959c, 0x823e2c, 0x395c98, 0xa9c1ff, 0xeeeeee, 0xb63e05, 0xd38441, 0xffe947, 0x70c6a9, 0x7696de, 0xa3a3a3, 0xc78c7c, 0xedc7bd])
         
         pyxel.load("theme2.pyxres")
         
