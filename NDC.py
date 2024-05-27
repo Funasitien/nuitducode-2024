@@ -1,14 +1,7 @@
 import pyxel
-from threading import Thread
-from time import time
 
 class App:
     def __init__(self) -> None:
-        
-        self.idle_animation = False
-        self.animation_frame = 0
-
-        self.last_time_moved = time()
         
         self.current_state = "title_screen"
 
@@ -21,12 +14,7 @@ class App:
         self.key_left = pyxel.KEY_LEFT
         self.key_right = pyxel.KEY_RIGHT
 
-        self.currentXGold = 120
-        self.currentYGold = 48
-        
-        self.score = 0
-
-        self.map =  [[2, 2, 2, 3, 3, 2, 2, 2, 2, 1, 3, 3, 2, 2],
+        self.map_beta =  [[2, 2, 2, 3, 3, 2, 2, 2, 2, 1, 3, 3, 2, 2],
                     [2, 2, 2, 1, 3, 2, 2, 2, 2, 2, 3, 3, 2, 2],
                     [2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 3, 2, 2],
                     [2, 2, 1, 4, 4, 4, 3, 2, 2, 0, 0, 0, 2, 2],
@@ -39,9 +27,11 @@ class App:
                     [2, 2, 2, 2, 2, 2, 4, 4, 4, 3, 2, 2, 2, 2],
                     [2, 0, 0, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2, 2],
                     [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2],
-                    [4, 4, 4, 4, 2, 2, 2, 4, 4, 4, 4, 2, 1, 2],
+                    [4, 4, 4, 4, 2, 2, 3, 4, 4, 4, 4, 2, 1, 2],
                     [2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
                     [2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2], ]
+        
+        self.map = [[2, 2, 4, 4, 4, 4, 4, 3, 2, 3, 2, 3, 3, 2], [3, 2, 2, 3, 3, 3, 2, 3, 2, 2, 2, 3, 3, 2], [3, 3, 2, 2, 1, 3, 2, 2, 2, 3, 2, 3, 3, 2], [3, 3, 2, 3, 2, 2, 2, 3, 3, 3, 2, 2, 2, 2], [4, 4, 4, 3, 1, 3, 3, 3, 3, 3, 2, 3, 3, 2], [2, 3, 2, 3 ,3, 1, 4, 4, 2, 2, 2, 3, 3, 2], [1, 3, 2, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3, 2], [3, 3, 2, 3, 2, 3, 3, 2, 3, 3, 2, 2, 2, 2,], [2, 3, 3, 3, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2], [2, 4, 4, 4, 4, 3, 3, 3, 3, 2, 3, 1, 2, 4], [2, 3, 2, 3, 3, 3, 2, 3, 3, 2, 3, 3, 3, 2], [2, 3, 3, 1, 4, 4, 4, 4, 4, 4, 2, 2, 3, 2], [1, 3, 3, 3, 3, 3, 2, 3, 3, 3, 3, 2, 3, 2], [3, 3, 2, 3, 3, 3, 2, 3, 2, 4, 4, 4, 4, 4], [4, 4, 4, 4, 4, 4, 4, 3, 4, 1, 3, 3, 3, 2], [1, 3, 2 ,3, 3, 3, 3, 3, 1, 3, 3, 1, 4, 4]]
 
         self.player = {'x' : 0, 'y' : 0}
 
@@ -53,8 +43,6 @@ class App:
         
         pyxel.load("theme2.pyxres")
         
-        Thread(target=self.decrement_time, daemon=True).start()
-
         pyxel.run(self.update, self.draw)
 
     def update(self): getattr(self, f"update_{self.current_state}")()
@@ -68,7 +56,6 @@ class App:
     #Exit      = 5
 
 
-    
     def update_title_screen(self):
         if pyxel.btn(pyxel.KEY_RETURN):
             self.current_state = "in_game"
@@ -78,22 +65,16 @@ class App:
             self.key_down = pyxel.KEY_DOWN
             self.key_left = pyxel.KEY_LEFT
             self.key_right = pyxel.KEY_RIGHT
-            self.currentXGold = 192
-            self.currentYGold = 48
         elif pyxel.btn(pyxel.KEY_Z):
             self.key_up = pyxel.KEY_Z
             self.key_down = pyxel.KEY_S
             self.key_left = pyxel.KEY_Q
             self.key_right = pyxel.KEY_D
-            self.currentXGold = 48
-            self.currentYGold = 48
         elif pyxel.btn(pyxel.KEY_W):
             self.key_up = pyxel.KEY_W
             self.key_down = pyxel.KEY_S
             self.key_left = pyxel.KEY_A
             self.key_right = pyxel.KEY_D
-            self.currentXGold = 120
-            self.currentYGold = 48
 
         if pyxel.btn(pyxel.KEY_1):
             self.timer = 90
@@ -110,7 +91,7 @@ class App:
 
         for i in range(16):
             for j in range(2):
-                pyxel.blt(i * 16, j * 16, 0, [16, 0][j], 80, 16, 16)
+                pyxel.blt(i * 16, j * 16, 0, 0, 80, 16, 16)
 
         pyxel.blt(16,16, 0, 0, 16, 16, 16, 11)
 
@@ -129,44 +110,39 @@ class App:
         pyxel.blt(192, 64, 0, 32, 64, 16, 16, 11)
         pyxel.blt(208, 64, 0, 48, 64, 16, 16, 11)
 
-        pyxel.blt(self.currentXGold, self.currentYGold, 0, 112, 48, 16, 16, 11)
-
     def update_in_game(self):
         #Player movement:
         self.last_move = None
         already_moved = False
 
-        if pyxel.btnp(self.key_down):
+        if pyxel.btnp(pyxel.KEY_DOWN):
             already_moved = True
             self.last_move = "d"
             if self.player['y'] < 13 and self.map[self.player['x']][self.player['y']+1] == 2:
                 self.map[self.player['x']][self.player['y']+1] = 0
 
-        if not already_moved and pyxel.btnp(self.key_right): 
+        if not already_moved and pyxel.btnp(pyxel.KEY_RIGHT): 
             self.looking_at = "r"
-            self.last_move = "r"
+            self.last_move = "d"
             already_moved = True
-            if self.player['x'] < 15 and self.map[self.player['x']+1][self.player['y']] == 2:
+            if self.player['x'] < 15 and self.map[self.player['x']+1][self.player['y']] in [1, 2]:
                 self.map[self.player['x']+1][self.player['y']] = 0
-            if self.player['x'] < 15 and self.map[self.player['x']+1][self.player['y']] in [0, 1, 4, 5]:
+            if self.player['x'] < 15 and self.map[self.player['x']+1][self.player['y']] in [0, 4, 5]:
                 self.player['x'] += 1
 
-        if not already_moved and pyxel.btnp(self.key_left):
+        if not already_moved and pyxel.btnp(pyxel.KEY_LEFT):
             self.looking_at = "l"
-            self.last_move = "l"
             already_moved = True
-            if self.player['x'] > 0 and self.map[self.player['x']-1][self.player['y']] == 2:
+            if self.player['x'] > 0 and self.map[self.player['x']-1][self.player['y']] in [1, 2]:
                 self.map[self.player['x']-1][self.player['y']] = 0
-            if self.player['x'] > 0 and self.map[self.player['x']-1][self.player['y']] in [0, 1, 4, 5]:
+            if self.player['x'] > 0 and self.map[self.player['x']-1][self.player['y']] in [0, 4, 5]:
                 self.player['x'] -= 1
 
-        if not already_moved and pyxel.btnp(self.key_up) and self.map[self.player['x']][self.player['y']] == 4:
+        if not already_moved and pyxel.btnp(pyxel.KEY_UP) and self.map[self.player['x']][self.player['y']] == 4:
             if self.player['y'] > 0 and self.map[self.player['x']][self.player['y']-1] == 2:
                 self.map[self.player['x']][self.player['y']-1] = 0
             if self.player['y'] > 0 and self.map[self.player['x']][self.player['y']-1] in [0, 1, 4]:
                 self.player['y'] -= 1 
-
-        if self.last_move != None: self.last_time_moved = time()
 
         #Make chests fall
         for x in range(16):
@@ -182,59 +158,15 @@ class App:
 
         #Make player fall
         if self.last_move != None:
-            self.falling_objects = [0, 1, 4, 5] if self.last_move == "d" else [0, 1, 5]
-            while self.player['y'] < 13 and self.map[self.player['x']][self.player['y']+1] in self.falling_objects: 
+            while self.player['y'] < 13 and self.map[self.player['x']][self.player['y']+1] in [0, 1, 4, 5]: 
                 self.player['y'] += 1
 
-        #Player/Chest collision
-        if self.map[self.player['x']][self.player['y']] == 1:
-            self.score += 10
-            self.map[self.player['x']][self.player['y']] = 0
-
-        if time()-self.last_time_moved >= 2:
-            self.idle_animation = True
-            self.animation_frame += 1
-        else: 
-            self.idle_animation = False
-
-        #Player/Exit collsion
-        if self.map[self.player['x']][self.player['y']] == 5: print("EXIIIIT")
-
     def draw_in_game(self): 
-        idle_show = 0
         pyxel.cls(0)
-
-        for i in range(16):
-            for j in range(2):
-                pyxel.blt(i * 16, j * 16, 0, [16, 0][j], 80, 16, 16)
-
-        pyxel.text(0, 0, f"Score : {self.score}", 7)
-        pyxel.text(0, 10, f"Timer : {round(self.timer)}", 7)
-
         for x in range(16):
             for y in range(14):
-                pyxel.blt(x*16, y*16+32, 0, 16*self.map[x][y], 0, 16, 16, 11)
-        idle_show = ( self.animation_frame % 64 )
-        idle_show = 16 if idle_show >= 50 else 0
-        if self.looking_at == "r": 
-            if self.idle_animation: pyxel.blt(self.player['x']*16, self.player['y']*16+32, 0, idle_show, 16, 16, 16, 11)
-            else: pyxel.blt(self.player['x']*16, self.player['y']*16+32, 0, 0, 16, 16, 16, 11)
-        elif self.looking_at == "l": 
-            if self.idle_animation: pyxel.blt(self.player['x']*16, self.player['y']*16+32, 0, 32+idle_show, 16, 16, 16, 11)
-            else: pyxel.blt(self.player['x']*16, self.player['y']*16+32, 0, 32, 16, 16, 16, 11)
-
-    def update_time_over(self): pass
-    def draw_time_over(self): 
-        pyxel.cls(0)
-        pyxel.text(0, 0, f"Time's up ! You scored {self.score} ", 7)
-
-
-    def decrement_time(self):
-        decrement_delay = last_time =time()
-        while self.timer > 0: 
-            current_time = time()
-            decrement_delay = current_time - last_time
-            last_time = current_time
-            self.timer -= decrement_delay
+                pyxel.blt(x*16, y*16+32, 0, 16*self.map[x][y], 0, 16, 16)
+        if self.looking_at == "r": pyxel.blt(self.player['x']*16, self.player['y']*16+32, 0, 0, 16, 16, 16, 11)
+        elif self.looking_at == "l": pyxel.blt(self.player['x']*16, self.player['y']*16+32, 0, 32, 16, 16, 16, 11)
 
 App()
