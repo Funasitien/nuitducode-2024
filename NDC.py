@@ -23,7 +23,7 @@ def new_random_map(entry_point_coords : tuple):
 
 class App:
     def __init__(self) -> None:
-        self.level = 1
+        self.level = 1        self.chest_opend = [0, 0, 0]        self.chest_opend = [0, 0, 0]
 
         self.slow_fall = False
 
@@ -83,6 +83,8 @@ class App:
 
         self.player = {'x' : 0, 'y' : 0}
 
+        self.chest_opend = [0, 0, 0]
+
         self.map[self.player['x']][self.player['y']] = 0
         
         self.difficulty = 0
@@ -141,7 +143,7 @@ class App:
         elif pyxel.btn(pyxel.KEY_3 or pyxel.KEY_KP_3):
             self.timer = 30
             self.difficulty = 2
-
+        self.chest_opend = [0, 0, 0]
     def draw_title_screen(self):
         pyxel.cls(0)
         for i in range(16):
@@ -246,6 +248,7 @@ class App:
 
         #Player/Chest collision
         if self.map[self.player['x']][self.player['y']] == 1:
+            self.chest_opend = [self.player['x'], self.player['y'], 60]
             self.score += 10
             self.map[self.player['x']][self.player['y']] = 0
             self.timer += 2
@@ -294,6 +297,10 @@ class App:
         elif self.looking_at == "l": 
             if self.idle_animation: pyxel.blt(player_show_x, player_show_y+32, 0, 32+idle_show, 16, 16, 16, 11)
             else: pyxel.blt(player_show_x, player_show_y+32, 0, 32, 16, 16, 16, 11)
+
+        if self.chest_opend[2] != 0:
+            self.chest_opend[2] -= 1
+            pyxel.text(self.chest_opend[0] * 16 + 8, self.chest_opend[1] * 16 + 3 + 0.15 * self.chest_opend[2], "+2", 7)
 
     def update_time_over(self): pass
     def draw_time_over(self): 
