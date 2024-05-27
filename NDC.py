@@ -20,7 +20,7 @@ class App:
         self.key_left = pyxel.KEY_A
         self.key_right = pyxel.KEY_D
 
-        self.currentXGold = 120
+        self.currentXGold = [120, 104, 120, 136]
         
         self.score = 0
 
