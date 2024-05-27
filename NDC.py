@@ -130,8 +130,13 @@ class App:
         pyxel.blt(208, 64, 0, 48, 64, 16, 16, 11)
 
         pyxel.blt(48, 128, 0, 64, 64, 156, 16, 11)
+        
+        pyxel.blt(64, 128, 0, 0, 110, 128, 16, 15)
+        pyxel.blt(64, 144, 0, 0, 126, 128, 16, 15)
+        pyxel.blt(64, 160, 0, 0, 142, 128, 16, 15)
+
         for i in range(4):
-            pyxel.blt(self.currentXGold[i], [48, 64, 64, 64][i], 0, 112, 48, 16, 16, 11)
+            pyxel.blt(self.currentXGold[i], [48, 64, 64, 64][i], 0, 112, 48, 16, 16, 15)
 
     def update_in_game(self):
         if pyxel.btnp(pyxel.KEY_RETURN):
