@@ -25,7 +25,7 @@ class App:
     def __init__(self) -> None:
         self.level = 1        
         self.chest_opend = [0, 0, 0]        
-        self.chest_opend = [0, 0, 0]
+        self.to_draw = 0
 
         self.slow_fall = False
 
@@ -44,6 +44,7 @@ class App:
         self.key_right = pyxel.KEY_D
 
         self.currentXGold = [120, 104, 120, 136]
+        self.currentYGold = 128
         
         self.score = 0
 
@@ -65,6 +66,23 @@ class App:
                             [4, 4, 4, 4, 2, 2, 2, 4, 4, 4, 4, 2, 1, 2],
                             [2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
                             [2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2], ]
+        
+        self.oneByOne = [[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                      [2, 2, 1, 2, 2, 3, 1, 2, 2, 2, 2, 2, 2, 2],
+                      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2],
+                      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2], 
+                      [2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2],
+                      [2, 2, 2, 2, 1, 2, 3, 2, 3, 2, 2, 3, 2, 2],
+                      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], 
+                      [2, 3, 2, 3, 2, 2, 2, 3, 2, 2, 2, 1, 2, 2],
+                      [2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2],
+                      [2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                      [3, 2, 2, 2, 3, 2, 2, 2, 2, 3, 2, 2, 2, 2],
+                      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 1],
+                      [2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2],
+                      [2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+                      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]]
 
         self.map = [[2, 2, 4, 4, 4, 4, 4, 3, 2, 3, 2, 3, 3, 5], 
                     [3, 2, 2, 3, 3, 3, 2, 3, 2, 2, 2, 3, 3, 2], 
@@ -139,12 +157,15 @@ class App:
         if pyxel.btn(pyxel.KEY_1 or pyxel.KEY_KP_1):
             self.timer = 90
             self.difficulty = 0
+            self.currentYGold = 128
         elif pyxel.btn(pyxel.KEY_2 or pyxel.KEY_KP_1):
             self.timer = 60
             self.difficulty = 1
+            self.currentYGold = 149
         elif pyxel.btn(pyxel.KEY_3 or pyxel.KEY_KP_3):
             self.timer = 30
             self.difficulty = 2
+            self.currentYGold = 170
         self.chest_opend = [0, 0, 0]
     def draw_title_screen(self):
         pyxel.cls(0)
@@ -176,11 +197,12 @@ class App:
         pyxel.blt(48, 96, 0, 64, 64, 156, 16, 11)
 
         pyxel.blt(64, 128, 0, 0, 110, 128, 16, 15)
-        pyxel.blt(64, 144, 0, 0, 126, 128, 16, 15)
-        pyxel.blt(64, 160, 0, 0, 142, 128, 16, 15)
+        pyxel.blt(64, 149, 0, 0, 126, 128, 16, 15)
+        pyxel.blt(64, 170, 0, 0, 142, 128, 16, 15)
 
         for i in range(4):
             pyxel.blt(self.currentXGold[i], [48, 64, 64, 64][i], 0, 96 + (self.difficulty * 16) , 48, 16, 16, 15)
+        pyxel.blt(64, self.currentYGold, 0, 144, 48, 16, 16, 15)
 
     def update_in_game(self):
         if pyxel.btnp(pyxel.KEY_RETURN):
