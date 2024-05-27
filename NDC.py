@@ -1,11 +1,9 @@
 import pyxel
 
-#pyxel edit theme2
-
 class App:
     def __init__(self) -> None:
         
-        self.currentState = "title_screen"
+        self.currentState = "in_game"
 
         self.key_up = pyxel.KEY_UP
         self.key_down = pyxel.KEY_DOWN
@@ -90,41 +88,55 @@ class App:
                 pyxel.blt(i * 16, j * 16, 0, 0, 80, 16, 16)
 
         pyxel.blt(16,16, 0, 0, 16, 16, 16, 11)
-        
-
-
 
     def update_in_game(self):
         #Player movement:
+        already_moved = False
+
         if pyxel.btnp(pyxel.KEY_DOWN):
+            already_moved = True
             if self.player['y'] < 13 and self.map[self.player['x']][self.player['y']+1] == 2:
                 self.map[self.player['x']][self.player['y']+1] = 0
             while self.player['y'] < 13 and self.map[self.player['x']][self.player['y']+1] in [0, 1, 4, 5]: 
                 self.player['y'] += 1
 
-        if pyxel.btnp(pyxel.KEY_RIGHT): 
+        if not already_moved and pyxel.btnp(pyxel.KEY_RIGHT): 
+            already_moved = True
             if self.player['x'] < 15 and self.map[self.player['x']+1][self.player['y']] in [1, 2]:
                 self.map[self.player['x']+1][self.player['y']] = 0
             if self.player['x'] < 15 and self.map[self.player['x']+1][self.player['y']] in [0, 4, 5]:
                 self.player['x'] += 1
 
-        if pyxel.btnp(pyxel.KEY_LEFT):
+        if not already_moved and pyxel.btnp(pyxel.KEY_LEFT):
+            already_moved = True
             if self.player['x'] > 0 and self.map[self.player['x']-1][self.player['y']] in [1, 2]:
                 self.map[self.player['x']-1][self.player['y']] = 0
             if self.player['x'] > 0 and self.map[self.player['x']-1][self.player['y']] in [0, 4, 5]:
                 self.player['x'] -= 1
 
-        if pyxel.btnp(pyxel.KEY_UP) and self.map[self.player['x']][self.player['y']] == 4:
-            if self.player['y'] > 0 and self.map[self.player['x']][self.player['y']] == 2:
-                self.map[self.player['x']][self.player['y']] == 0
+        if not already_moved and pyxel.btnp(pyxel.KEY_UP) and self.map[self.player['x']][self.player['y']] == 4:
+            if self.player['y'] > 0 and self.map[self.player['x']][self.player['y']-1] == 2:
+                self.map[self.player['x']][self.player['y']-1] = 0
             if self.player['y'] > 0 and self.map[self.player['x']][self.player['y']-1] in [0, 1, 4]:
                 self.player['y'] -= 1 
+
+        #Make chests fall
+        for x in range(16):
+            for y in range(14):
+                if self.map[x][y] == 1:
+                    chest_y = y
+                    while chest_y < 13 and self.map[x][chest_y+1] in [0, 1]: 
+                        chest_y += 1
+                    if chest_y != y: 
+                        if self.map[x][chest_y] == 1: chest_y -= 1
+                        self.map[x][y] = 0
+                        self.map[x][chest_y]
 
     def draw_in_game(self): 
         pyxel.cls(0)
         for x in range(16):
             for y in range(14):
                 pyxel.blt(x*16, y*16+32, 0, 16*self.map[x][y], 0, 16, 16)
-        pyxel.blt(self.player['x']*16, self.player['y']*16+32, 0, 0, 16, 16, 16)
+        pyxel.blt(self.player['x']*16, self.player['y']*16+32, 0, 0, 16, 16, 16, 11)
 
 App()
