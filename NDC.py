@@ -55,6 +55,8 @@ class App:
         self.timer = 90
 
         pyxel.init(256, 256, title="NDC", fps=60)
+
+        pyxel.colors.from_list([0x000000, 0x2bb33f, 0x4e1e11, 0x19959c, 0x823e2c, 0x395c98, 0xa9c1ff, 0xeeeeee, 0xb63e05, 0xd38441, 0xffe947, 0x70c6a9, 0x7696de, 0xa3a3a3, 0xc78c7c, 0xedc7bd])
         
         pyxel.load("theme2.pyxres")
         
@@ -110,8 +112,10 @@ class App:
             self.difficulty = 2
             self.currentYGold = 170
         self.chest_opend = [0, 0, 0]
+
     def draw_title_screen(self):
         pyxel.cls(0)
+
         for i in range(16):
             for j in range(14):
                 pyxel.blt(i * 16, j * 16 + 32, 0, 0, 0, 16, 16)
@@ -119,6 +123,8 @@ class App:
         for i in range(16):
             for j in range(2):
                 pyxel.blt(i * 16, j * 16, 0, [16, 0][j], 80, 16, 16)
+
+        pyxel.blt(96, 230, 0, 101, 80, 70, 7, 11)
 
         pyxel.blt(16,16, 0, 0, 16, 16, 16, 11)
 
@@ -255,7 +261,7 @@ class App:
 
         pyxel.text(10, 12, f"{round(self.timer)}", 0)
         pyxel.text(0, 20, f"level : {self.level}", 0)
-        pyxel.text(100, 15, f"Map Title : {self.map_title}", 0)
+        pyxel.text(85, 15, f"Map : {self.map_title}", 0)
 
         for x in range(16):
             for y in range(14):
@@ -290,8 +296,8 @@ class App:
     def update_time_over(self): pass
     def draw_time_over(self): 
         pyxel.cls(0)
-        pyxel.text(0, 0, f"Time's up ! You scored {self.score} ", 7)
-        pyxel.blt(100, 100, 0, 100, 0, 64, 16, 11)
+        pyxel.text(70, 80, f"Time's up ! You scored {self.score} ", 7)
+        pyxel.blt(65, 100, 0, 0, 158, 126, 45, 11)
 
     def update_fading(self): pass
     def draw_fading(self):
