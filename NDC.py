@@ -21,6 +21,9 @@ class App:
         self.key_left = pyxel.KEY_LEFT
         self.key_right = pyxel.KEY_RIGHT
 
+        self.currentXGold = 120
+        self.currentYGold = 48
+        
         self.score = 0
 
         self.map =  [[2, 2, 2, 3, 3, 2, 2, 2, 2, 1, 3, 3, 2, 2],
