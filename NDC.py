@@ -3,12 +3,18 @@ import pyxel
 class App:
     def __init__(self) -> None:
         
-        self.currentState = "title_screen"
+        self.currentState = "in_game"
 
         self.key_up = pyxel.KEY_UP
         self.key_down = pyxel.KEY_DOWN
         self.key_left = pyxel.KEY_LEFT
         self.key_right = pyxel.KEY_RIGHT
+
+        self.map =  [[2 for y in range(14)] for x in range(16)]
+
+        self.player = {'x' : 0, 'y' : 0}
+
+        self.map[self.player['x']][self.player['y']] = 0
 
         self.timer = 60
 
@@ -23,6 +29,8 @@ class App:
     #Breakable = 2
     #Unbreak   = 3 
     #Ladder    = 4
+    #Exit      = 5
+
 
     def update_title_screen(self):
         if pyxel.btn(pyxel.KEY_RETURN):
@@ -51,8 +59,38 @@ class App:
         elif pyxel.btn(pyxel.KEY_3):
             self.timer = 30
 
+    def draw_title_screen(self): pass
 
-    def draw_title_screen(self): 
+    def update_in_game(self):
+        #Player movement:
+        if pyxel.btnp(pyxel.KEY_DOWN):
+            if self.player['y'] < 13 and self.map[self.player['x']][self.player['y']+1] == 2:
+                self.map[self.player['x']][self.player['y']+1] = 0
+            while self.player['y'] < 13 and self.map[self.player['x']][self.player['y']+1] in [0, 1, 4, 5]: 
+                self.player['y'] += 1
 
+        if pyxel.btnp(pyxel.KEY_RIGHT): 
+            if self.player['x'] < 15 and self.map[self.player['x']+1][self.player['y']] in [1, 2]:
+                self.map[self.player['x']+1][self.player['y']] = 0
+            if self.player['x'] < 15 and self.map[self.player['x']+1][self.player['y']] in [0, 4, 5]:
+                self.player['x'] += 1
+
+        if pyxel.btnp(pyxel.KEY_LEFT):
+            if self.player['x'] > 0 and self.map[self.player['x']-1][self.player['y']] in [1, 2]:
+                self.map[self.player['x']-1][self.player['y']] = 0
+            if self.player['x'] > 0 and self.map[self.player['x']-1][self.player['y']] in [0, 4, 5]:
+                self.player['x'] -= 1
+
+        if pyxel.btnp(pyxel.KEY_UP) and self.map[self.player['x']][self.player['y']] == 4:
+            if self.player['y'] > 0 and self.map[self.player['x']][self.player['y']] == 2:
+                self.map[self.player['x']][self.player['y']] == 0
+            if self.player['y'] > 0 and self.map[self.player['x']][self.player['y']-1] in [0, 1, 4]:
+                self.player['y'] -= 1 
+
+    def draw_in_game(self): 
+        for x in range(16):
+            for y in range(14):
+                pyxel.rect(x*16, y*16+32, 16, 16, self.map[x][y])
+        pyxel.rect(self.player['x']*16, self.player['y']*16+32, 16, 16, 7)
 
 App()
