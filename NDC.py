@@ -68,6 +68,8 @@ class App:
     def update_title_screen(self):
         if pyxel.btn(pyxel.KEY_RETURN):
             self.current_state = "in_game"
+            self.last_time_moved = time()
+            Thread(target=self.decrement_time, daemon=True)
 
         if pyxel.btn(pyxel.KEY_UP):
             self.key_up = pyxel.KEY_UP
