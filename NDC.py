@@ -21,7 +21,6 @@ class App:
         self.key_right = pyxel.KEY_D
 
         self.currentXGold = 120
-        self.currentYGold = 48
         
         self.score = 0
 
@@ -69,30 +68,25 @@ class App:
     def update_title_screen(self):
         if pyxel.btn(pyxel.KEY_RETURN):
             self.current_state = "in_game"
-            self.last_time_moved = time()
-            Thread(target=self.decrement_time, daemon=True).start()
 
         if pyxel.btn(pyxel.KEY_UP):
             self.key_up = pyxel.KEY_UP
             self.key_down = pyxel.KEY_DOWN
             self.key_left = pyxel.KEY_LEFT
             self.key_right = pyxel.KEY_RIGHT
-            self.currentXGold = 192
-            self.currentYGold = 48
+            self.currentXGold = [192, 176, 192, 208]
         elif pyxel.btn(pyxel.KEY_Z):
             self.key_up = pyxel.KEY_Z
             self.key_down = pyxel.KEY_S
             self.key_left = pyxel.KEY_Q
             self.key_right = pyxel.KEY_D
-            self.currentXGold = 48
-            self.currentYGold = 48
+            self.currentXGold = [48, 32, 48, 64]
         elif pyxel.btn(pyxel.KEY_W):
             self.key_up = pyxel.KEY_W
             self.key_down = pyxel.KEY_S
             self.key_left = pyxel.KEY_A
             self.key_right = pyxel.KEY_D
-            self.currentXGold = 120
-            self.currentYGold = 48
+            self.currentXGold = [120, 104, 120, 136]
 
         if pyxel.btn(pyxel.KEY_1):
             self.timer = 90
@@ -128,7 +122,9 @@ class App:
         pyxel.blt(192, 64, 0, 32, 64, 16, 16, 11)
         pyxel.blt(208, 64, 0, 48, 64, 16, 16, 11)
 
-        pyxel.blt(self.currentXGold, self.currentYGold, 0, 112, 48, 16, 16, 11)
+        pyxel.blt(48, 128, 0, 64, 64, 156, 16, 11)
+        for i in range(4):
+            pyxel.blt(self.currentXGold[i], [48, 64, 64, 64][i], 0, 112, 48, 16, 16, 11)
 
     def update_in_game(self):
         if self.slow_fall: return
