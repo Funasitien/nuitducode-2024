@@ -71,7 +71,7 @@ class App:
         if pyxel.btn(pyxel.KEY_RETURN):
             self.current_state = "in_game"
             self.last_time_moved = time()
-            Thread(target=self.decrement_time, daemon=True)
+            Thread(target=self.decrement_time, daemon=True).start()
 
         if pyxel.btn(pyxel.KEY_UP):
             self.key_up = pyxel.KEY_UP
