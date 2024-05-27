@@ -10,8 +10,7 @@ class App:
         self.key_left = pyxel.KEY_LEFT
         self.key_right = pyxel.KEY_RIGHT
 
-
-        self.map = [[2, 2, 2, 3, 3, 2, 2, 2, 2, 1, 3, 3, 2, 2],
+        self.map =  [[2, 2, 2, 3, 3, 2, 2, 2, 2, 1, 3, 3, 2, 2],
                     [2, 2, 2, 1, 3, 2, 2, 2, 2, 2, 3, 3, 2, 2],
                     [2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 3, 2, 2],
                     [2, 2, 1, 4, 4, 4, 3, 2, 2, 0, 0, 0, 2, 2],
@@ -27,7 +26,6 @@ class App:
                     [4, 4, 4, 4, 3, 3, 3, 4, 4, 4, 4, 3, 1, 2],
                     [2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
                     [2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2], ]
-        self.map_2 =  [[2 for y in range(14)] for x in range(16)]
 
         self.player = {'x' : 0, 'y' : 0}
 
@@ -36,6 +34,9 @@ class App:
         self.timer = 60
 
         pyxel.init(256, 256, title="NDC")
+        
+        pyxel.load("theme2.pyxres")
+        
         pyxel.run(self.update, self.draw)
 
     def update(self): getattr(self, f"update_{self.currentState}")()
@@ -105,9 +106,10 @@ class App:
                 self.player['y'] -= 1 
 
     def draw_in_game(self): 
+        pyxel.cls(0)
         for x in range(16):
             for y in range(14):
-                pyxel.rect(x*16, y*16+32, 16, 16, self.map[x][y])
-        pyxel.rect(self.player['x']*16, self.player['y']*16+32, 16, 16, 7)
+                pyxel.blt(x*16, y*16+32, 0, 16*self.map[x][y], 0, 16, 16)
+        pyxel.blt(self.player['x']*16, self.player['y']*16+32, 0, 0, 16, 16, 16)
 
 App()
