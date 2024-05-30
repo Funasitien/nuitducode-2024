@@ -17,3 +17,7 @@ Vous avez trois option quand vous ouvrez le jeu - **WASD**, **ZQSD** et **Flèch
 - ![Bloc d'air](./coffre.png) Les coffres, qui augemente le score et offre deux secondes suplémentaires pour vivre dans la mine
 - ![Bloc d'air](./echelle.png) Les Echelles, le seul moyen de remonter dans la mine
 - ![Bloc d'air](./porte.png) Les portes, qui permettent d'accéder à un autre niveau 
+
+<h2>Jouer</h2>
+<iframe src="https://f.dreamclouds.fr/nuitducode-2024/play" style="border:0px #ffffff none;" name="NUITDUCODE" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="512px" width="512px" allowfullscreen>
+</iframe>
