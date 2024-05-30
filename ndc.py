@@ -1,11 +1,10 @@
 import pyxel
+from threading import Thread
 from time import time
 
 
 class App:
     def __init__(self) -> None:
-        self.dec_timer = 0
-
         self.time_animation = 0
 
         self.going_up = False
@@ -56,11 +55,11 @@ class App:
         self.timer = 90
 
         pyxel.init(256, 256, title="NDC", fps=60)
+
+        pyxel.colors.from_list([0x000000, 0x2bb33f, 0x4e1e11, 0x19959c, 0x823e2c, 0x395c98, 0xa9c1ff, 0xeeeeee, 0xb63e05, 0xd38441, 0xffe947, 0x70c6a9, 0x7696de, 0xa3a3a3, 0xc78c7c, 0xedc7bd])
         
         pyxel.load("theme2.pyxres")
         
-        pyxel.colors.from_list([0x000000, 0x2bb33f, 0x4e1e11, 0x19959c, 0x823e2c, 0x395c98, 0xa9c1ff, 0xeeeeee, 0xb63e05, 0xd38441, 0xffe947, 0x70c6a9, 0x7696de, 0xa3a3a3, 0xc78c7c, 0xedc7bd])
-
         pyxel.run(self.update, self.draw)
 
     def update(self): getattr(self, f"update_{self.current_state}")()
@@ -79,6 +78,7 @@ class App:
             self.first_pause = False
             self.is_pause_menu = False
             self.last_time_moved = time()
+            Thread(target=self.decrement_time, daemon=True).start()
 
         if pyxel.btn(pyxel.KEY_UP):
             self.key_up = pyxel.KEY_UP
@@ -154,11 +154,6 @@ class App:
         pyxel.blt(64, self.currentYGold, 0, 144, 48, 16, 16, 15)
 
     def update_in_game(self):
-        self.dec_timer += 1
-        if self.dec_timer >= 60: self.dec_timer = 0 ; self.timer -= 1
-        if self.timer <= 0: 
-            self.current_state = "time_over"
-
         if pyxel.btnp(pyxel.KEY_RETURN):
             self.current_state = "title_screen"
             self.is_pause_menu = True
@@ -316,9 +311,20 @@ class App:
         if self.fade_x >= 256 and self.fade_y >= 256: 
             self.current_state = "in_game"
             self.is_pause_menu = False
+            Thread(target=self.decrement_time, daemon=True).start()
             self.fade_x = -16
             self.fade_y = 0
             self.fade_dir = 1
+
+    def decrement_time(self):
+        decrement_delay = last_time =time()
+        while self.timer > 0 and not self.is_pause_menu: 
+            current_time = time()
+            decrement_delay = current_time - last_time
+            last_time = current_time
+            self.timer -= decrement_delay
+        if self.is_pause_menu: return
+        self.current_state = "time_over"
 
     def get_new_level(self): 
         map0 = [[2, 2, 2, 3, 3, 2, 2, 2, 2, 1, 3, 3, 2, 5],
